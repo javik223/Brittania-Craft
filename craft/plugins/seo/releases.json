@@ -1,0 +1,65 @@
+[
+  {
+    "version": "1.0.0",
+    "downloadUrl": "https://github.com/ethercreative/seo/archive/v1.0.0.zip",
+    "date": "2016-02-12T10:00:00-08:00",
+    "notes": [
+      "Initial Release"
+    ]
+  },
+  {
+    "version": "1.0.1",
+    "downloadUrl": "https://github.com/ethercreative/seo/archive/v1.0.1.zip",
+    "date": "2016-03-22T10:00:00-08:00",
+    "notes": [
+      "Fixed bug where the entry URL in the SEO fieldtype snippet was incorrect for Single entries.",
+      "Fixed double slash on Homepage URL in SEO fieldtype snippet."
+    ]
+  },
+  {
+    "version": "1.0.2",
+    "downloadUrl": "https://github.com/ethercreative/seo/archive/v1.0.2.zip",
+    "date": "2016-03-23T10:00:00-08:00",
+    "notes": [
+      "Stopped SEO fields showing up in the Readability Check list for the SEO fieldtype."
+    ]
+  },
+  {
+    "version": "1.0.3",
+    "downloadUrl": "https://github.com/ethercreative/seo/archive/v1.0.3.zip",
+    "date": "2016-03-31T10:00:00-08:00",
+    "notes": [
+      "Fixed bug where redirects containing trailing slashes were not redirected!"
+    ]
+  },
+  {
+    "version": "1.0.4",
+    "downloadUrl": "https://github.com/ethercreative/seo/archive/v1.0.4.zip",
+    "date": "2016-04-13T10:00:00-08:00",
+    "notes": [
+      "Fixed error on settings save when no readability fields were checked."
+    ]
+  },
+  {
+    "version": "1.0.5",
+    "downloadUrl": "https://github.com/ethercreative/seo/archive/v1.0.5.zip",
+    "date": "2016-04-28T10:00:00-08:00",
+    "notes": [
+      "- Fixed bug where redirects wouldn't be saved when there were more than ~246 rows ([#3](https://github.com/ethercreative/seo/issues/3)).",
+      "- Removed unused Public Path setting field.",
+      "- **NOTICE:** You may need to clear Crafts template cache in order for this update work!"
+    ]
+  },
+  {
+    "version": "1.1.0",
+    "downloadUrl": "https://github.com/ethercreative/seo/archive/v1.1.0.zip",
+    "date": "2016-05-31T10:00:00-08:00",
+    "notes": [
+      "- Fixed #5 - Fieldtype can now be used on any element type (but keyword & score will only be visible on entries).",
+      "- Fix #7 via @FrankZwiers - Check regex exec for null value",
+      "- Fix #8 via @roelvanhintum - Admin is unavailable from the console",
+      "- Removed all \"Readability\" settings! - We now examine the page exactly as Google would see it.",
+      "- **Added Craft Commerce Support**"
+    ]
+  }
+]

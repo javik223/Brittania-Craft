@@ -1,0 +1,108 @@
+{#
+ # Homepage template
+ # ---------------
+ #
+ # When this template gets loaded, it will be because someone has accessed
+ # http://yoursite.com/ (without any URI). Craft checks to see if you have
+ # a Single section set to be the Homepage (as you do, by default), and
+ # loads the section’s Template (this file). A special ‘entry’ variable
+ # will already be set for you, assigned to the Homepage entry.
+ #
+ # It's worth noting that even if you didn't have a Homepage Single section,
+ # as long as this template remains at craft/templates/index.html, it
+ # would still be the one to get loaded when accessing http://yoursite.com/,
+ # albeit without an ‘entry’ variable already set for you.
+ #
+ # See this page for more details on how Craft routes requests:
+ # http://craftcms.com/docs/routing
+ #}
+
+{% extends "_layout" %}
+
+{% block content %}
+	<!-- @include header.kit -->
+	<div class="hero hero-slider" >
+		<div class="content">
+			<h1 class="content-heading">Indigenous, Pioneering &amp; Global</h1>
+
+			<h5 class="content-body">At Brittania-U, we are pioneering new energy solutions in Africa, and making global impact through our operations.</h5>
+		</div>
+		<div class="row cycle-slideshow" data-cycle-fx="fade" 
+	    data-cycle-timeout="3000" data-cycle-speed="1000"
+	    data-cycle-slides="> div">
+			<div>
+				<img src="/assets/img/home-hero-image.jpg" alt="Indigenous, Pioneering &amp; Global">
+			</div>
+
+			<div>
+				<img src="/assets/img/home-hero-image2.jpg" alt="Indigenous, Pioneering &amp; Global">
+			</div>
+
+			<div>
+				<img src="/assets/img/home-hero-image3.jpg" alt="Indigenous, Pioneering &amp; Global">
+			</div>
+		</div>
+	</div>
+
+	<div class="row large-up-3 featured-sections collapse">
+		<a class="featured-section" href="/about/what-we-do.html#exploration-and-production" title="Exploration and Production">
+			<img src="/assets/img/exploration-and-production.jpg" alt="Exploration and Production">
+			<h2 class="featured-section_title">Exploration and Production</h2>
+		</a>
+		<a class="featured-section" href="/about/what-we-do.html#drilling-and-oil-services" title="Drillign and Oil Services">
+			<img src="/assets/img/driling-and-oil-services.jpg" alt="Drilling and Oil Services">
+			<h2 class="featured-section_title">Drilling and Oil Services</h2>
+		</a>
+		<a class="featured-section" href="about/what-we-do.html#engineering-and-consultancy" title="Engineering and Consultancy">
+			<img src="/assets/img/engineering-and-consultancy.jpg" alt="Engineering and Consultancy">
+			<h2 class="featured-section_title">Engineering and Consultancy</h2>
+		</a>
+	</div>
+
+	<div class="row collapse mt-100">
+		<div class="medium-8 large-6 column mb-60">
+			<h3 class="c-p mt-pad">About Brittania-U</h3>
+
+			<h5 class="text-light c-g mt-pad mt-40">
+				Brittania-U is an indigenous integrated company that delivers energy services through exploration &amp; production, subsurface engineering &amp; consultancy.
+			</h5>
+			
+			<div class="mt-60">&nbsp;</div>
+			<div class="mt-pad">
+				<a href="/about" class="button button-round" title="More about Brittania-U">More about Brittania-U</a>
+			</div>
+		</div>
+
+		<div class="homepage-video medium-10 large-5 medium-offset-1 float-left column">
+			<span class="icon icon-play"></span>
+			<h1>Our Operations At A Glance</h1>
+		</div>
+	</div>
+
+	<div class="row collapse mt-100">
+		<div class="home-csr medium-12 large-6 mb-40 column">
+			<img src="/assets/img/csr.jpg" alt="CSR" class="medium-5">
+
+			<div class="medium-7 column home-csr_content">
+				<h3>Sustainability through development</h3>
+				<p class="c-t">Our committment to our communities</p>
+			</div>
+		</div>
+
+		<div class="medium-12 large-5 column press-releases-featured float-left mt-pad">
+			<h3 class="c-p">Press Releases</h3>
+
+			<div class="item">
+				<span class="item_date">14th October 2015</span>
+				<h5><a class="item_title" href="press-and-media/brittania-u-goes-pink-for-cancer">Brittania-U Goes Pink For Cancer Awareness</a></h5>
+			</div>
+
+			<div class="item">
+				<span class="item_date">20th August 2015</span>
+				<h5><a class="item_title" href="press-and-media/brittania-u-goes-pink-for-cancer">Reliving The Commissioning Of The BU1 - Brittania-U’s Floating Production Storage And Offloading (FPSO) Unit</a></h5>
+			</div>
+		</div>
+	</div>
+	<!-- @include footer.kit -->
+
+{% endblock %}

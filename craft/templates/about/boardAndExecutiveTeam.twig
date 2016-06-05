@@ -1,0 +1,58 @@
+{#
+ # News entry template
+ # -------------------
+ #
+ # This template gets loaded whenever a News entry’s URL is
+ # requested. That’s because the News section’s Template setting is
+ # set to “news/_entry”, the path to this template.
+ #
+ # When this template is loaded, it will already have an ‘entry’
+ # variable, set to the requested News entry.
+ #
+ # See this page for more details on how Craft routes requests:
+ # http://craftcms.com/docs/routing
+ #}
+
+{% extends "_layout" %}
+
+{% block content %}
+	{# Breadcrumb #}
+	{% include '_breadcrumb' %}
+
+	<div class="row main collapse board-profile-main">
+		{# About side menu.#}
+		{% include '/about/_sidemenu' %}
+
+		<div class="medium-9 column">
+				<div class="m-pad">
+					<h2 class="medium-12 column c-p text-alt-light mb-40">Board &amp; Executive Team</h2>
+				</div>
+				<div class="medium-12 large-8 column end">
+					 <div class="row m-pad">
+				 		{{ entry.body }}
+				 	</div>
+				</div>
+		</div>
+	</div>
+
+		{# Board Members #}
+		{% set boardMembers = craft.entries.section('about').type('boardMember') %}
+
+		{% if boardMembers|length > 0 %}
+			<div class="row collapse mt-80">
+				<div class="board medium-10 medium-offset-1 large-10 large-offset-3 column collapse">
+				
+				{% for boardMember in boardMembers %}
+				   <a class="board-member" href="{{ boardMember.url }}" title="{{ boardMember.title }} - {{ boardMember.position }}">
+				   	{% set boardMemberImage = boardMember.thumbnail.first() %}
+				   	<img src="{{ boardMemberImage.url }}" alt="{{ boardMember.title }}" width="{{ boardMemberImage.width }}" height="{{ boardMemberImage.height }}">
+
+				   	<h3>{{ boardMember.title }}</h3>
+				   	<p>{{ boardMember.position }}</p>
+				   </a> 
+				{% endfor %}
+
+				</div>
+			</div>
+		{% endif %}
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends '_layout' %}
+
+{% block content %}
+    {% include '_breadcrumb' %}
+
+    <div class="row main collapse">
+		{% include '/the-group/_sidemenu' %}
+
+    	<div class="medium-9 column">
+    		<div class="row m-pad column">
+    			<h2 class="medium-12 column c-p text-alt-light mb-0">The Group</h2>
+    			
+    			<div class="column text-light mb-60">
+    				<h5 class="text-light c-g">{{ entry.intro }}</h5>
+
+    				{{ entry.body }}
+    			</div>
+    		</div>
+
+    		{# Brittania-U Groups #}
+    		{% set groups = craft.entries.section('theGroup') %}
+			
+			{% if groups|length > 0 %}
+				<div class="row m-pad column group-logos">
+				{% for group in groups %}
+				    <div class="medium-6 column">
+				    	{% set thumbnail = group.thumbnail.first() %}
+				    	<a href="{{ group.url }}">
+				    	<img src="{{ thumbnail.url }}" alt="{{ group.title }}" width="{{ thumbnail.width }}" height="{{ thumbnail.height }}"></a>
+				    </div>
+				{% endfor %}
+				</div>
+			{% endif %}
+    	</div>
+    </div>
+{% endblock %}

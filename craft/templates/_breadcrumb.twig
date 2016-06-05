@@ -1,0 +1,17 @@
+<div class="breadcrumb-container mt-pad">
+	<div class="row column">
+		<ul>
+			<li><a href="/" title="Brittania-U Homepage"><span>Home</span></a></li>
+			{% if craft.request.getSegments()|length > 1 %}
+				<li><a href="/{{ craft.request.firstSegment }}" title="{{ craft.request.firstSegment|title }}"><span>{{ craft.request.firstSegment|title|replace({'-': ' '}) }}</span></a></li>
+			{% endif %}
+			
+			{% if entry.level > 1 %}
+		        {% for crumb in entry.getAncestors() %}
+		            <li><a href="{{ crumb.url() }}" title="{{ crumb.title }}"><span>{{ crumb.title }}</span></a></li>
+		        {% endfor %}
+			{% endif %}
+			<li><a href="" title="{{ entry.title }}"><span>{{ entry.title }}</span></a></li>
+		</ul>
+	</div>
+</div>

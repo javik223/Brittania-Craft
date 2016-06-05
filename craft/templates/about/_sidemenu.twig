@@ -1,0 +1,19 @@
+{% set navConfig = {
+		        'startwithActive' : true,
+		        'maxDepth' : 2,
+		        'activeClassOnAncestors' : true,
+		        'ancestorActiveClass' : 'activeAncestor',
+		    } %}
+
+		 {% set navigation = craft.navee.getNav('about', navConfig) %}
+
+		 <ul class="side-menu column medium-3 large-2 mt-pad">
+		     {% nav node in navigation %}
+		         <li{% if node.class %} class="{{ node.class }}"{% endif %}>
+		             <a href="{{ node.link }}">{{ node.title }}</a>
+		             {% ifchildren %}
+		                 <ul>{% children %}</ul>
+		             {% endifchildren %}
+		         </li>
+		     {% endnav %}
+		 </ul>

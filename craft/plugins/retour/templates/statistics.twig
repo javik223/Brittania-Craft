@@ -1,0 +1,118 @@
+{% extends "_layouts/cp" %}
+{% import '_includes/forms' as forms %}
+
+{% includeCssResource "retour/css/Retour.css" %}
+{% includeJsResource "retour/js/Retour.js" %}
+{% includeJsResource "retour/js/moment.min.js" %}
+{% includeJsResource "retour/js/stupidtable.min.js" %}
+
+{% set title = craft.retour.getPluginName() %}
+
+{% set docsUrl = "https://github.com/nystudio107/retour/blob/master/README.md" %}
+
+{% set retourSections = {
+    redirects:      { label: "Redirects"|t, url: url('retour/redirects') },
+    statistics:     { label: "Statistics"|t, url: url('retour/statistics') },
+    settings:       { label: "Settings"|t, url: url('retour/settings') },
+} %}
+
+{% set crumbs = [
+    { label: craft.retour.getPluginName(), url: url('retour') },
+    { label: "Statistics"|t, url: url('retour/statistics') },
+] %}
+
+{% if craft.app.version < 2.5 %}
+    {% set tabs = retourSections %}
+    {% set selectedTab = 'statistics' %}
+{% else %}
+    {% set subnav = retourSections %}
+    {% set selectedSubnavItem = 'statistics' %}
+{% endif %}
+
+{% set extraPageHeaderHtml %}
+    <div class="buttons">
+        <a href="{{ url('retour/clearStats') }}" class="btn delete icon">{{ "Clear Stats"|t }}</a>
+    </div>
+{% endset %}
+
+{% set content %}
+
+<!-- Staistics -->
+
+        <h2>{{ "Retour Statistics" |t }}</h2>
+
+        {% set stats = craft.retour.getStatistics() %}
+        {% if stats|length %}
+            <div class="tableview">
+                <table id="statistics" class="data fullwidth">
+                    <thead>
+                        <th data-sort="string-ins" scope="col">{{ "404 File Not Found URL"|t }}</th>
+                        <th data-sort="int" scope="col">{{ "Hits"|t }}<span class="arrow">&darr;</span></th>
+                        <th data-sort="date" scope="col">{{ "Last Hit"|t }}</th>
+                        <th data-sort="string-ins" scope="col">{{ "Handled by Retour"|t }}</th>
+                    </thead>
+                    <tbody>
+
+                        {% for stat in stats %}
+                            <tr data-id="{{ stat.id }}" data-name="{{ stat.redirectSrcUrl }}">
+                                <td><a class="go" href="{{ url(stat.redirectSrcUrl) }}">{{ stat.redirectSrcUrl }}</a></td>
+                                <td>{{ stat.hitCount }}</td>
+                                <td>{{ stat.hitLastTime |datetime }}</td>
+                                <td>{% if stat.handledByRetour %}<span style="color: green;">&#x2714;</span>{% else %}<span style="color: red;">&#x2716;</span>{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p id="no-statistics" class="instructions">You have no 404s yet.</p>
+        {% endif %}
+
+{% endset %}
+
+{% set js %}
+    $(function(){
+      var moveBlanks = function(a, b) {
+        if ( a < b ){
+          if (a == "")
+            return 1;
+          else
+            return -1;
+        }
+        if ( a > b ){
+          if (b == "")
+            return -1;
+          else
+            return 1;
+        }
+        return 0;
+      };
+      var moveBlanksDesc = function(a, b) {
+        // Blanks are by definition the smallest value, so we don't have to
+        // worry about them here
+        if ( a < b )
+          return 1;
+        if ( a > b )
+          return -1;
+        return 0;
+      };
+      var table = $("table").stupidtable({
+        "date":function(a,b){
+          aDate = moment(a, "MMM, DD, YYYY, hh:mm:ss A");
+          bDate = moment(b, "MMM, DD, YYYY, hh:mm:ss A");
+          return aDate - bDate;
+        },
+        "moveBlanks": moveBlanks,
+        "moveBlanksDesc": moveBlanksDesc,
+      });
+      table.on("aftertablesort", function (event, data) {
+        var th = $(this).find("th");
+        th.find(".arrow").remove();
+        var dir = $.fn.stupidtable.dir;
+        var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
+        th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+      });
+    });
+{% endset %}
+{% includeJs js %}

@@ -1,0 +1,16 @@
+{{ forms.textField({
+	label: 'Sitemap Name',
+	instructions: 'The name of your sitemap file. It will be found at <strong>' ~ siteUrl ~ '<code id="sitemapNameExample">' ~ (settings.sitemapName is defined ? settings.sitemapName : '') ~ '.xml</code></strong>',
+	name: 'sitemapName',
+	id: 'sitemapName',
+	value: settings.sitemapName is defined ? settings.sitemapName : ''
+}) }}
+
+{# {{ forms.textField({
+	label: 'Public Path',
+	instructions: 'If you are not using database redirect method, we need to know where your public directory is. Environment variables in single braces are allowed.',
+	name: 'publicPath',
+	id: 'publicPath',
+	placeholder: '{basePath}',
+	value: settings.publicPath is defined ? settings.publicPath : ''
+}) }} #}

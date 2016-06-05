@@ -1,0 +1,116 @@
+{% extends '_layout' %}
+
+{% block content %}
+	<div class="top-section">
+		<div class="large-6 column about-intro-video">
+			{% set videoImage = entry.introVideoThumbnail.first() %}
+			<img src="{{ videoImage.url }}" alt="{{ videoImage.title }}">
+		</div>
+
+		<div class="large-4 column float-left large-offset-1 mt-pad">
+			<h2 class="page-title mt-pad column">About Brittania-U</h2>
+
+			<h5 class="text-regular mt-pad c-g">{{ entry.intro }}</h5>
+		</div>
+	</div>
+
+	<div class="row main collapse">
+		{# About side menu.#}
+		{% include '/about/_sidemenu' %}
+
+		<div class="medium-9 column">
+			{# Body Text #}
+			<div class="medium-7 large-8 column large-8 mt-pad">
+				<div class="row m-pad">
+		 			{{ entry.body }}
+			 	</div>
+			</div>
+
+			{# Message from the CEO #}
+		 	<div class="medium-5 large-4 column message-from-ceo">
+		 		<a href="about/message-from-the-ceo">{% set messageFromTheEditorImage = entry.messageFromTheEditorImage.first() %}
+		 		<img src="{{ messageFromTheEditorImage.url }}" alt="{{ messageFromTheEditorImage.title }}" class="small-6 medium-12 column" width="{{ messageFromTheEditorImage.width }}" height="{{ messageFromTheEditorImage.height }}">
+
+		 		<h5 class="message-from-ceo_title medium-12 small-6 column">A message from the CEO <span class="icon icon-chevron-right"></span></h5></a>
+		 	</div>
+
+			{# Row 1 Featured Sections #}
+		 	<div class="column featured-sections featured-sections-double large-10 end mt-80">
+		 		{% set rowOne = entry.rowOne %}
+		 		
+		 		{% if rowOne|length > 0 %}
+					{% for blocks in rowOne %}
+						{% set image = blocks.itemImage.first() %}
+					    
+					    <a class="featured-section" href="{{ blocks.itemLink.first().url }}" title="{{ blocks.itemTitle }}">
+					    	<img src="{{ image.url }}" alt="{{ image.title }}" width="{{ image.width }}" height="{{ image.height }}">
+					    	<h2 class="featured-section_title featured-section_title-bottom">{{ blocks.itemTitle }}</h2>
+					    </a>
+					{% endfor %}
+		 		{% endif %}
+		 		
+		 	</div>
+		</div>
+	</div>
+
+	<div class="row main collapse mt-40 mt-pad">
+		{% set rowTwo = entry.rowTwo %}
+
+		{% for block in rowTwo %}
+		{# Strategy and Leadership Callout Text #}
+		    <h5 class="medium-10 large-4 text-light c-g column pr-20 mb-40">
+		    	{{ block.columnOne }}
+		    </h5>
+
+		{# Strategy and Leadership Image #}
+		<div class="medium-6 large-4 column mb-40">
+			{% set leadershipImage = block.columnTwo.first() %}
+			<img src="{{ leadershipImage.url }}" alt="Strategy and Leadership" width="{{ leadershipImage.width }}" height="{{ leadershipImage.height }}">
+		</div>
+
+		{# Strategy and Leadership Content #}
+		<div class="medium-6 large-4 column pl-medium-20">
+			{{ block.columnThree }}
+
+			<div class="mb-10">&nbsp;</div>
+
+			{# Links #}
+			{% set links = block.links %}
+			
+			{% for link in links %}
+			    <a href="{{ link.linkURL }}" class="stand-out-link" title="{{ link.linkTitle }}">{{ link.linkTitle }}</a>
+			{% endfor %}
+		</div>
+		{% endfor %}
+	</div>
+
+	<div class="row column collapse mt-80 ">
+		<div class="medium-12 large-8 column collapse mt-pad">
+			<div class="featured-sections featured-sections-double large-12 end collapse mb-40">
+			{# Row Three columns #}
+			{% set rowThreeImages = entry.rowThreeImages %}
+			{% for block in rowThreeImages %}
+				{% set image = block.itemImage.first() %}
+			    <a class="featured-section pr-medium-20" href="{{ block.itemLinks.first().url }}" title="{{ block.itemTitle }}">
+			    	<img src="{{ image.url }}" alt="{{ block.itemTitle }}" width="{{ image.width }}" height="{{ image.height }}">
+			    	<h2 class="featured-section_title featured-section_title-bottom">What We Do</h2>
+			    </a>
+			{% endfor %}
+			</div>
+		</div>
+
+		{# Row Three Content #}
+		<div class="medium-10 large-4 column end mt-pad">
+			{% set rowThreeContent = entry.rowThreeContent %}
+			{% for block in rowThreeContent %}
+			    {{ block.itemContent }}
+
+			    <div class="mb-10">&nbsp;</div>
+			    {% set links = block.itemContentLinks %}
+			    {% for link in links %}
+			        <a href="{{ link.linkURL }}" class="stand-out-link" title="{{ link.linkTitle }}">{{ link.linkTitle }}</a>
+			    {% endfor %}
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

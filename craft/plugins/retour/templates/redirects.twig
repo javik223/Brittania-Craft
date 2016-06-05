@@ -1,0 +1,171 @@
+{% extends "_layouts/cp" %}
+{% import '_includes/forms' as forms %}
+
+{% includeCssResource "retour/css/Retour.css" %}
+{% includeJsResource "retour/js/Retour.js" %}
+{% includeJsResource "retour/js/moment.min.js" %}
+{% includeJsResource "retour/js/stupidtable.min.js" %}
+
+{% set title = craft.retour.getPluginName() %}
+
+{% set docsUrl = "https://github.com/nystudio107/retour/blob/master/README.md" %}
+
+{% set retourSections = {
+    redirects:      { label: "Redirects"|t, url: url('retour/redirects') },
+    statistics:     { label: "Statistics"|t, url: url('retour/statistics') },
+    settings:       { label: "Settings"|t, url: url('retour/settings') },
+} %}
+
+{% set crumbs = [
+    { label: craft.retour.getPluginName(), url: url('retour') },
+    { label: "Redirects"|t, url: url('retour/redirects') },
+] %}
+
+{% if craft.app.version < 2.5 %}
+    {% set tabs = retourSections %}
+    {% set selectedTab = 'redirects' %}
+{% else %}
+    {% set subnav = retourSections %}
+    {% set selectedSubnavItem = 'redirects' %}
+{% endif %}
+
+{% set extraPageHeaderHtml %}
+    <div class="buttons">
+        <a href="{{ url('retour/new') }}" class="btn submit add icon">{{ "New Static Redirect"|t }}</a>
+    </div>
+{% endset %}
+
+{% set content %}
+
+        {% set matchesList = craft.retour.getMatchesList() %}
+
+<!-- Static Redirects -->
+
+        <h2>{{ "Static Redirects" |t }}</h2>
+
+        {% set redirects = craft.retour.getStaticRedirects() %}
+        {% if redirects|length %}
+            <div class="tableview">
+                <table id="static-redirects" class="data fullwidth">
+                    <thead>
+                        <th data-sort="string-ins" scope="col">{{ "Legacy URL Pattern"|t }}</th>
+                        <th data-sort="string-ins" scope="col">{{ "Redirect To"|t }}</th>
+                        <th data-sort="string-ins" scope="col">{{ "Pattern Match Type"|t }}</th>
+                        <th data-sort="string-ins" scope="col">{{ "Redirect Type"|t }}</th>
+                        <th data-sort="int" scope="col">{{ "Hits"|t }}<span class="arrow">&darr;</span></th>
+                        <th data-sort="date" scope="col">{{ "Last Hit"|t }}</th>
+                        <th class="thin right"></th>
+                    </thead>
+                    <tbody>
+
+                        {% for redir in redirects %}
+                            <tr data-id="{{ redir.id }}" data-name="{{ redir.redirectSrcUrl }}">
+                                <td><a class="go" href="{{ url("retour/edit/" ~ redir.id) }}">{{ redir.redirectSrcUrl }}</a></td>
+                                <td>{{ redir.redirectDestUrl }}</td>
+                                <td>{{ matchesList[redir.redirectMatchType] }}</td>
+                                <td>{{ redir.redirectHttpCode }}</td>
+                                <td>{{ redir.hitCount }}</td>
+                                <td>{{ redir.hitLastTime |datetime }}</td>
+                                <td class="rightalign"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p id = "no-static-redirects" class="instructions">You have no Static Redirects.  You can create clicking on the <strong>+ New Static Redirect</strong> button.</p>
+        {% endif %}
+
+        <p class="textline"></p>
+
+<!-- Entry Redirects -->
+
+        <h2>{{ "Dynamic Entry Redirects" |t }}</h2>
+
+        {% set redirects = craft.retour.getEntryRedirects() %}
+        {% if redirects|length %}
+            <div class="tableview">
+                <table id="entry-redirects" class="data fullwidth">
+                    <thead>
+                        <th data-sort="string-ins" scope="col">{{ "Legacy URL Pattern"|t }}</th>
+                        <th data-sort="string-ins" scope="col">{{ "Redirect To"|t }}</th>
+                        <th data-sort="string-ins" scope="col">{{ "Pattern Match Type"|t }}</th>
+                        <th data-sort="string-ins" scope="col">{{ "Redirect Type"|t }}</th>
+                        <th data-sort="int" scope="col">{{ "Hits"|t }}<span class="arrow">&darr;</span></th>
+                        <th data-sort="date" scope="col">{{ "Last Hit"|t }}</th>
+                    </thead>
+                    <tbody>
+
+                        {% for redir in redirects %}
+                            {% set associatedEntry = craft.entries.id(redir.associatedElementId).locale(redir.locale).first %}
+                            <tr data-id="{{ redir.id }}" data-name="{{ redir.redirectSrcUrl }}">
+                                <td><a class="go" href="{{ associatedEntry.cpEditUrl }}">{{ redir.redirectSrcUrl }}</a></td>
+                                <td>{{ redir.redirectDestUrl }}</td>
+                                <td>{{ matchesList[redir.redirectMatchType] }}</td>
+                                <td>{{ redir.redirectHttpCode }}</td>
+                                <td>{{ redir.hitCount }}</td>
+                                <td>{{ redir.hitLastTime |datetime }}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="instructions">You have no Dynamic Entry Redirects.  You can create them by adding a Retour Redirect FieldType to your Section Entry Types.</p>
+        {% endif %}
+
+{% endset %}
+
+{% set js %}
+    new Craft.AdminTable({
+        tableSelector: '#static-redirects',
+        noObjectsSelector: '#no-static-redirects',
+        deleteAction: 'retour/deleteRedirect'
+    });
+
+    $(function(){
+      var moveBlanks = function(a, b) {
+        if ( a < b ){
+          if (a == "")
+            return 1;
+          else
+            return -1;
+        }
+        if ( a > b ){
+          if (b == "")
+            return -1;
+          else
+            return 1;
+        }
+        return 0;
+      };
+      var moveBlanksDesc = function(a, b) {
+        // Blanks are by definition the smallest value, so we don't have to
+        // worry about them here
+        if ( a < b )
+          return 1;
+        if ( a > b )
+          return -1;
+        return 0;
+      };
+      var table = $("table").stupidtable({
+        "date":function(a,b){
+          aDate = moment(a, "MMM, DD, YYYY, hh:mm:ss A");
+          bDate = moment(b, "MMM, DD, YYYY, hh:mm:ss A");
+          return aDate - bDate;
+        },
+        "moveBlanks": moveBlanks,
+        "moveBlanksDesc": moveBlanksDesc,
+      });
+      table.on("aftertablesort", function (event, data) {
+        var th = $(this).find("th");
+        th.find(".arrow").remove();
+        var dir = $.fn.stupidtable.dir;
+        var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
+        th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+      });
+    });
+{% endset %}
+{% includeJs js %}
