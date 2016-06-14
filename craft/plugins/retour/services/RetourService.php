@@ -229,6 +229,49 @@ class RetourService extends BaseApplicationComponent
     } /* -- lookupRedirect */
 
 /**
+ * [saveStaticRedirect description]
+ * @param  Retour_StaticRedirectsRecord $record the static redirect record to save
+ * @return [type]         [description]
+ */
+    public function saveStaticRedirect($record)
+    {
+        $error = "";
+
+        if (isset($record))
+        {
+            if ($record->redirectSrcUrl == "")
+            {
+                $id = $record->id;
+                $affectedRows = craft()->db->createCommand()->delete('retour_static_redirects', array(
+                    'id' => $id
+                ));
+
+                RetourPlugin::log("Deleted Redirected: " . $id, LogLevel::Info, false);
+                $error = craft()->cache->flush();
+                RetourPlugin::log("Cache flushed: " . print_r($error, true), LogLevel::Info, false);
+                $error = -1;
+            }
+            else
+            {
+                if ($record->save())
+                {
+                    $error = craft()->cache->flush();
+                    RetourPlugin::log("Cache flushed: " . print_r($error, true), LogLevel::Info, false);
+                    craft()->userSession->setNotice(Craft::t('Retour Redirect saved.'));
+                    $error = "";
+                }
+                else
+                {
+                    $error = $record->getErrors();
+                    RetourPlugin::log(print_r($error, true), LogLevel::Info, false);
+                    craft()->userSession->setError(Craft::t('Couldn’t save Retour Redirect.'));
+                }
+            }
+        }
+        return $error;
+    } /* -- saveStaticRedirect */
+
+/**
  * @param  Retour_RedirectsModel The redirect to create
  */
     public function incrementRedirectHitCount(&$redirect)
@@ -308,7 +351,6 @@ class RetourService extends BaseApplicationComponent
 
 /**
  * @param  int $id The redirect's id
- * @param  string $locale  The locale
  * @return Mixed The resulting Redirect
  */
     public function getRedirectById($id)
@@ -316,6 +358,17 @@ class RetourService extends BaseApplicationComponent
         $result = Retour_StaticRedirectsRecord::model()->findByAttributes(array('id' => $id));
         return $result;
     } /* -- getRedirectById */
+
+/**
+ * @param  string $srcUrl the redirect's redirectSrcUrl
+ * @param  string $locale  The locale
+ * @return Mixed The resulting Redirect
+ */
+    public function getRedirectByRedirectSrcUrl($srcUrl, $locale)
+    {
+        $result = Retour_RedirectsRecord::model()->findByAttributes(array('redirectSrcUrl' => $srcUrl, 'locale' => $locale));
+        return $result;
+    } /* -- getRedirectByredirectSrcUrl */
 
 /**
  * @param  Retour_RedirectsModel The redirect to save
@@ -356,11 +409,17 @@ class RetourService extends BaseApplicationComponent
     {
         if (isset($redirectsModel))
         {
-            $result = new Retour_RedirectsRecord;
-            $result->setAttributes($redirectsModel->getAttributes(), false);
-            $result->save();
-            $error = $result->getErrors();
-            RetourPlugin::log(print_r($error, true), LogLevel::Info, false);
+
+/* -- Don't try to create a redirect if one already exists for the redirectSrcUrl */
+
+            if (!$this->getRedirectByRedirectSrcUrl($redirectsModel->redirectSrcUrl, $redirectsModel->locale))
+            {
+                $result = new Retour_RedirectsRecord;
+                $result->setAttributes($redirectsModel->getAttributes(), false);
+                $result->save();
+                $error = $result->getErrors();
+                RetourPlugin::log(print_r($error, true), LogLevel::Info, false);
+            }
         }
     } /* -- createRedirect */
 

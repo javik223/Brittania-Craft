@@ -1,0 +1,15 @@
+{% extends '_layout' %}
+
+{% block content %}
+    {# Breadcrumb #}
+    {% include '_breadcrumb' %}
+
+    <div class="row main collapse">
+        {# About side menu. #}
+            {% include '/our-committment/_sidemenu' %}
+            {# About side menu end#}
+            <div class="medium-9 column">
+                {{ entry.body }}
+            </div>
+    </div>
+{% endblock %}

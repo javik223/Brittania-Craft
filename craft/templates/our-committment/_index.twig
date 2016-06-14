@@ -1,0 +1,68 @@
+{% extends '_layout' %}
+
+{% block content %}
+    {% include '_breadcrumb' %}
+
+    <div class="row main collapse">
+        {% include '/our-committment/_sidemenu' %}
+
+        <div class="medium-9 column">
+            
+            <div class="row column collapse">
+                <div class="medium-11 large-4 column pl-0 mb-40">
+                    <h2 class="medium-12 c-p text-alt-light mb-0">Our Comittment</h2>
+
+                    {{ entry.body }}
+                </div>
+
+                <div class="medium-12 large-6 column">
+                    {% set introImage = entry.introImage.first() %}
+                    <img src="{{ introImage.getURL() }}" alt="{{ introImage.title }}" width="{{ introImage.getWidth() }}" height="{{ introImage.getHeight() }}">
+                </div>
+            </div>
+
+            {% set rowOne = entry.rowOne %}
+            {% if rowOne|length > 0 %}
+            <div class="row mt-40">
+                {% for block in rowOne %}
+                <div class="medium-6 column">
+                    {% set link = block.itemLink.first() %}
+                    {% set image = block.itemImage.first() %}
+                    <a href="{{ link.url }}" class="c-p">
+                        <img src="{{ image.getURL() }}" alt="{{ image.title }}" width="{{ image.getWidth() }}" height="{{ image.getHeight() }}">
+                        <h4 class="mt-20 mb-40">{{ block.itemTitle }}</h4>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% set communityRelations = entry.communityRelations %}
+
+            {% for block in communityRelations %}
+                <div class="row column ruled-top">
+                    <h3 class="c-p mb-40">Community Relations</h3>
+
+                    {% set heroImage = block.heroImage.first() %}
+                    {% set link = block.communityRelationsLink.first() %}
+                    <a href="{{ link }}" title="CSR and Community development"><img src="{{ heroImage.getURL }}" alt="CSR and Community Development" class="mb-20" width="{{ heroImage.getWidth() }}" height="{{ heroImage.getHeight() }}"></a>
+
+                    <div class="row">
+                        <div class="medium-6 column">
+                            <h4 class="text-light c-g mb-40">
+                               {{ block.text }}
+                            </h4>
+
+                            <a href="{{ link.getURL() }}" title="CSR and Community Development" class="button button-round small">Our CSR and Community Development</a>
+                        </div>
+
+                        <div class="medium-5 column">
+                            {% set otherImage = block.otherImage.first() %}
+                            <img src="{{ otherImage.getURL() }}" alt="{{ otherImage.title }}" width="{{ otherImage.getWidth() }}" height="{{ otherImage.getHeight() }}">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

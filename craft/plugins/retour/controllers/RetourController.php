@@ -66,7 +66,7 @@ class RetourController extends BaseController
         $record->locale = craft()->language;
         $record->redirectMatchType = craft()->request->getPost('redirectMatchType', $record->redirectMatchType);
         $record->redirectSrcUrl = craft()->request->getPost('redirectSrcUrl', $record->redirectSrcUrl);
-        if ($record->redirectMatchType == "exactmatch")
+        if (($record->redirectMatchType == "exactmatch") && ($record->redirectSrcUrl !=""))
             $record->redirectSrcUrl = '/' . ltrim($record->redirectSrcUrl, '/');
         $record->redirectSrcUrlParsed = $record->redirectSrcUrl;
         $record->redirectDestUrl = craft()->request->getPost('redirectDestUrl', $record->redirectDestUrl);
@@ -74,20 +74,15 @@ class RetourController extends BaseController
         $record->hitLastTime = DateTimeHelper::currentUTCDateTime();
         $record->associatedElementId = 0;
 
-        if ($record->save())
+        $result = craft()->retour->saveStaticRedirect($record);
+        if ($result === "" || $result === -1)
         {
-            $error = craft()->cache->flush();
-            RetourPlugin::log("Cache flushed: " . print_r($error, true), LogLevel::Info, false);
-            craft()->userSession->setNotice(Craft::t('Retour Redirect saved.'));
             $this->redirectToPostedUrl($record);
         }
         else
         {
-            $error = $record->getErrors();
-            RetourPlugin::log(print_r($error, true), LogLevel::Info, false);
-            craft()->userSession->setError(Craft::t('Couldn’t save Retour Redirect.'));
 
-/* -- Send the Meta back to the template */
+/* -- Send the record back to the template */
 
             craft()->urlManager->setRouteVariables(array(
                 'values' => $record

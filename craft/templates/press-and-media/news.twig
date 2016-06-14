@@ -1,0 +1,32 @@
+{% extends '_layout' %}
+{% block content %}
+    {% include '_breadcrumb' %}
+
+    <div class="row main press-main">
+      <div class="medium-10 medium-offset-1 column collapse ">
+        <div class="row column collapse text-center">
+          <h4>Press &amp; Media</h4>
+          <h3 class="c-p">{{ entry.title }}</h3>
+          <p>{{ entry.postDate|date("F d, Y") }}</p>
+          <div class="pb-large">&nbsp;</div>
+
+        {% set featuredImage = entry.featuredImage.first() %}
+        {% if featuredImage|length > 0 %}
+            <img src="{{ featuredImage.getURL() }}" alt="{{ entry.title }}" width="{{ featuredImage.getWidth() }}" height="{{ featuredImage.getHeight() }}">
+        {% endif %}
+        </div>
+
+        <div class="pb-large">&nbsp;</div><div class="pb-large">&nbsp;</div>
+
+        <div class="large-10 large-offset-1 column collapse end">
+          {{ entry.body }}
+        </div>
+      </div>
+    </div>
+
+    <div class="pb-large">&nbsp;</div>
+    <div class="pb-large">&nbsp;</div>
+    <div class="pb-large">&nbsp;</div>
+    <div class="pb-large">&nbsp;</div>
+    <div class="pb-large">&nbsp;</div>
+{% endblock %}

@@ -8,7 +8,7 @@ html, body { height: 100%; }
 
 #login-form.has-logo { padding-top: 116px; }
 
-#login-form h1 { text-align: center; font-size: 3em; color: #29323d; }
+#login-form h1 { text-align: center; font-size: 3em; color: #29323d; word-wrap: break-word; }
 
 #login-form .field { margin: 0; }
 

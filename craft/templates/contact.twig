@@ -1,0 +1,62 @@
+{% extends '_layout' %}
+
+{% block content %}
+    <div class="breadcrumb-container mt-pad">
+        <div class="row column">
+            <ul>
+                <li><a href="/" title="Brittania-U Homepage"><span>Home</span></a></li>
+                <li><a href="/contact" title="Contact"><span>Contact</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row main collapse">
+        <div class="medium-12 column mt-pad">
+                <h2 class="medium-12 c-p text-alt-light mb-40">Contact Us</h2>
+                <div class="medium-12 large-5 column end">
+                     <div class="row">
+                     <div class="medium-12">
+                        <img src="/assets/img/brittania-contact-image.jpg" alt="Brittania-U staff communicating on a walkie talkie">
+
+                        <h4 class="mt-20 mb-40 text-light c-g">{{ entry.intro }}</h4>
+
+                        {% set addresses = entry.address %}
+
+                        {% if addresses|length > 0 %}
+                        
+                        <div class="row collapse">
+                        {% for address in addresses %}
+                            <div class="medium-6 large-12 column mb-40">
+                                <h3 class="c-p">{{ address.addressTitle }}</h3>
+                                {{ address.address }}
+                            </div>
+                        {% endfor %}
+                        </div>
+
+                        {% endif %}
+                     </div>
+                </div>
+                </div>
+
+                <div class="medium-12 large-6 column collapse pl-0">
+                    <div class="pl-0"><h3 class="c-p mb-20">Our Global Footprint</h3>
+                    
+                    <img src="/assets/img/brittania-u-footprint.jpg" alt="Brittania-U Global Footprint">
+
+                    <p class='mt-20'>Email: {{ entry.contactEmail }}</p>
+
+                    <h5 class="c-s">Contact us via our social media channels</h5>
+
+                    <div class="medium-12 social-icon-set">
+                        <a class="icon icon-twitter" href="{{ socialTwitter.text }}"></a>
+
+                        <a class="icon icon-facebook" href="{{ socialFacebook.text }}"></a>
+                    </div>
+                    </div>
+
+                    <p class="small mt-60 c-g">{{ entry.disclaimerNote }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

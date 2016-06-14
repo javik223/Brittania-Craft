@@ -1,0 +1,75 @@
+{% extends '_layout' %}
+{% block content %}
+    <div class="breadcrumb-container mt-pad">
+      <div class="row column">
+        <ul>
+          <li><a href="/" title="Brittania-U Homepage"><span>Home</span></a></li>
+          <li><a href="/press" title="Press"><span>Press</span></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row main">
+      <div class="medium-12 column collapse ">
+        <div class="row column collapse">
+          <div class="medium-11 large-12 column pl-0 mb-40">
+            <h2 class="medium-12 c-p text-alt-light mb-0">Press &amp; Media</h2>
+
+            <h5 class="text-light c-g">Browse through the latest news and press release or join the conversation on our social channels</h5>
+          </div>
+        </div>
+
+        <div class="row column">
+        {% set entries = craft.entries({
+            section: 'pressAndMedia'
+        }) %}
+
+        {% set small = {
+            mode: 'crop',
+            width: 375,
+            height: 250,
+            quality: 90,
+            position: 'top-center'
+        } %}    
+        
+        {% for entry in entries %}
+          <a class="press-card" href="{{ entry.url }}" title="{{ entry.title }}">
+            {% set image = entry.featuredImage.first() %}
+            {% if image|length > 0 %}
+                <div class="press-card_image">
+                  <img src="{{ image.getURL(small) }}" alt="{{ entry.title }}" width="{{ image.getWidth(small) }}" height="{{ image.getHeight(small) }}">
+                </div>        
+            {% endif %}
+        
+            <div class="press-card_content">
+              <span class="press-card_date">{{ entry.postDate|date("F d, Y") }}</span>
+              <h4>{{ entry.title }}</h4>
+              <h4 class="icon icon-chevron-right"></h4>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+        <div class="pb-large">&nbsp;</div>
+
+        <div class="pb-large">&nbsp;</div>
+        <div class="pb-large">&nbsp;</div>
+
+        <div class="row column press-social">
+          <div class="text-center">
+            <h3 class="c-p">Social Media</h3>
+
+            <h5 class="text-light c-g">Join the Conversation on our social media channels</h5>
+
+            <h1>
+              <a href="{{ socialFacebook.text }}" class="icon icon-facebook" title="Brittania-U on facebook"></a>
+
+              <a href="{{ socialTwitter.text }}" class="icon icon-twitter" title="britannia-u on twitter"></a>
+
+              <a href="{{ socialLinkedin.text }}" class="icon icon-linkedin" title="Brittania-U on LinkedIn"></a>
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
